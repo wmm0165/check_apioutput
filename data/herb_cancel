@@ -1,0 +1,15 @@
+<root>
+  <base>
+    <hospital_code><![CDATA[H0003]]></hospital_code>
+    <patient_id><![CDATA[{{zyhzh}}]]></patient_id>
+    <event_no><![CDATA[{{zyhzh}}]]></event_no>
+    <source><![CDATA[住院]]></source>
+  </base>
+ <orders>
+<herb_medical_order>
+  <herb_medical_order_info>
+        <order_id><![CDATA[co4_{{zyhzh}}]]></order_id>
+  </herb_medical_order_info>
+</herb_medical_order>
+  </orders>
+</root>

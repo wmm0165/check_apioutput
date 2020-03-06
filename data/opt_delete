@@ -1,0 +1,16 @@
+<root>
+  <base>
+    <hospital_code><![CDATA[H0003]]></hospital_code>
+    <patient_id><![CDATA[{{mzhzh}}]]></patient_id>
+    <event_no><![CDATA[{{mzhzh}}]]></event_no>
+    <source><![CDATA[急诊]]></source>
+  </base>
+  <opt_prescriptions>
+    <opt_prescription>
+      <opt_prescription_info>
+        <recipe_id><![CDATA[r1_{{ts}}]]></recipe_id>
+        <recipe_no><![CDATA[r1_{{ts}}]]></recipe_no>
+      </opt_prescription_info>
+    </opt_prescription>
+  </opt_prescriptions>
+</root>
