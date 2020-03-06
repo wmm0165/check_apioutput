@@ -55,7 +55,7 @@
       <recipe_fee_total><![CDATA[44.55]]></recipe_fee_total>
       <original_recipe_id><![CDATA[]]></original_recipe_id>
       <recipe_status><![CDATA[1]]></recipe_status>
-    <urgent_flag><![CDATA[1]]></urgent_flag>
+      <urgent_flag><![CDATA[1]]></urgent_flag>
       <pharmacy_id><![CDATA[123456]]></pharmacy_id>
       <pharmacy_name><![CDATA[发药药房名称]]></pharmacy_name>
     </opt_prescription_info>

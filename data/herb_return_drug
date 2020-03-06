@@ -1,7 +1,7 @@
 <root>
   <base>
     <hospital_code><![CDATA[H0003]]></hospital_code>
-    <event_no><![CDATA[eno_{{zyhzh}}]]></event_no>
+    <event_no><![CDATA[{{zyhzh}}]]></event_no>
     <patient_id><![CDATA[pid_{{zyhzh}}]]></patient_id>
     <source><![CDATA[住院]]></source>
   </base>

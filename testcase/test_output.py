@@ -40,7 +40,7 @@ class TestIpt:
         print(content.decode('utf-8'))
         assert xmltodict.parse(content)['root']['orders']['medical_order_item']['order_status'] == expected
         assert xmltodict.parse(content)['root']['orders']['medical_order_item']['order_id'] == 'o1_' + filename
-        assert xmltodict.parse(content)['root']['orders']['medical_order_item']['order_id'] == filename
+        assert xmltodict.parse(content)['root']['orders']['medical_order_item']['group_no'] == filename
 
 
 class TestHerb:
@@ -88,7 +88,7 @@ class TestHerb:
 
 
 class TestOpt:
-    @pytest.mark.parametrize("xmlname,expected", [('opt_new', 0)])
+    @pytest.mark.parametrize("xmlname,expected", [('opt_new', '0')])
     def test_opt_0(self, get_conn, send, xmlname, expected):
         """原始正常状态，改成新版新开处方状态"""
         send.post_xml(url_normal, xmlname)
@@ -100,10 +100,10 @@ class TestOpt:
         assert xmltodict.parse(content)['root']['opt_prescriptions']['opt_prescription']['opt_prescription_info'][
                    'recipe_status'] == expected
 
-    @pytest.mark.parametrize("xmlname,expected", [('opt_zuofei', '2'), ('opt_delete', '2'), ('opt_return_drug_1', '2')])
+    @pytest.mark.parametrize("xmlname,expected", [('opt_zuofei', '2'), ('opt_delete', '2')])
     def test_opt_1(self, get_conn, send, xmlname, expected):
         """原作废处方、删除处方都按新版删除处方处理，注意以下是新版本入参，旧版本4.1的接口文档缺少recipe_doc_id、recipe_doc_name
-            原始处方退药状态,全退（无明细）
+            原始处方退药状态,全退（无明细），此时会被接口拦截 ('opt_return_drug_1', '2')
         <root>
           <base>
             <hospital_code><![CDATA[H0003]]></hospital_code>
@@ -124,10 +124,10 @@ class TestOpt:
         </opt_prescriptions>
         </root>
         """
-        if xmlname == 'opt_zuofei':  # 对旧的3.5版本作废走的是正常接口、删除走的删除接口，现两个作废和删除都要走删除接口
-            send.post_xml(url_normal, xmlname)
-        else:
+        if xmlname == 'opt_delete':  # 对旧的3.5版本作废走的是正常接口、删除走的删除接口，现两个作废和删除都要走删除接口
             send.post_xml(url_cancel, xmlname)
+        else:
+            send.post_xml(url_normal, xmlname)
         time.sleep(1)
         filename = send.change_data['{{ts}}']
         stdout = get_conn.exec_command('cat /tmp/hisresult/2020-03-06/H0003/receive_path/{}*.txt'.format(filename))[1]
