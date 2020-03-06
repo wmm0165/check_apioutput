@@ -59,43 +59,6 @@
       <pharmacy_id><![CDATA[123456]]></pharmacy_id>
       <pharmacy_name><![CDATA[发药药房名称]]></pharmacy_name>
     </opt_prescription_info>
-    <opt_prescription_item>
-      <recipe_item_id><![CDATA[ra_{{ts}}]]></recipe_item_id>
-      <recipe_id><![CDATA[r1_{{ts}}]]></recipe_id>
-      <drug_purpose><![CDATA[科室领药]]></drug_purpose>
-      <group_no><![CDATA[{{gp}}]]></group_no>
-      <drug_id><![CDATA[00351100]]></drug_id>
-      <drug_name><![CDATA[奥硝唑氯化钠注射液]]></drug_name>
-      <count_unit><![CDATA[6]]></count_unit>
-      <pack_unit><![CDATA[盒]]></pack_unit>
-      <manufacturer_id><![CDATA[12]]></manufacturer_id>
-      <manufacturer_name><![CDATA[西安杨森制药有限公司]]></manufacturer_name>
-      <drug_dose><![CDATA[0.25g]]></drug_dose>
-      <drug_admin_route_name><![CDATA[口服]]></drug_admin_route_name>
-      <drug_using_freq><![CDATA[bid]]></drug_using_freq>
-      <drug_using_time_point><![CDATA[餐前]]></drug_using_time_point>
-      <drug_using_aim><![CDATA[治疗]]></drug_using_aim>
-      <drug_using_area><![CDATA[全身]]></drug_using_area>
-      <duration><![CDATA[3天]]></duration>
-      <preparation><![CDATA[普通片]]></preparation>
-      <specification><![CDATA[0.1g]]></specification>
-      <unit_price><![CDATA[6.30]]></unit_price>
-      <despensing_num><![CDATA[3]]></despensing_num>
-      <fee_total><![CDATA[6.30]]></fee_total>
-      <start_time><![CDATA[{{d2}}]]></start_time>
-      <end_time><![CDATA[{{d2}}]]></end_time>
-      <special_prompt><![CDATA[忌辛辣]]></special_prompt>
-      <skin_test_flag><![CDATA[0]]></skin_test_flag>
-      <skin_test_result><![CDATA[皮试结果]]></skin_test_result>
-      <skin_test_time><![CDATA[{{d2}}]]></skin_test_time>
-      <drug_source><![CDATA[1]]></drug_source>
-      <drug_return_flag><![CDATA[0]]></drug_return_flag>
-      <ouvas_flag><![CDATA[1]]></ouvas_flag>
-      <infusion_speed><![CDATA[20滴/分钟]]></infusion_speed>
-	  <limit_time><![CDATA[限用时间]]></limit_time>
-      <therapeutic_regimen><![CDATA[用药方案]]></therapeutic_regimen>
-      <medicare_type><![CDATA[1]]></medicare_type>
-     </opt_prescription_item>
   </opt_prescription>
 </opt_prescriptions>
 </root>

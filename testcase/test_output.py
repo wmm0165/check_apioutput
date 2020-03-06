@@ -8,9 +8,10 @@ from config.cfg import url_normal, url_cancel
 
 
 class TestIpt:
-    @pytest.mark.parametrize("xmlname,expected", [('ipt_new', '0'),('ipt_stop', '4')])
-    def test_ipt_0(self, get_conn, send, xmlname, expected):
-        """药嘱新开和停止"""
+    @pytest.mark.parametrize("xmlname,expected,despensing_num",
+                             [('ipt_return_drug', '-1', '-1.0'), ('ipt_stop', '4', '1.0')])
+    def test_ipt_0(self, get_conn, send, xmlname, expected, despensing_num):
+        """药嘱退药和停止"""
         send.post_xml(url_normal, xmlname)
         time.sleep(1)
         filename = send.change_data['{{ts}}']
@@ -18,13 +19,31 @@ class TestIpt:
         content = stdout.read()
         print(content.decode('utf-8'))
         assert xmltodict.parse(content)['root']['orders']['medical_order_item']['order_status'] == expected
-        assert xmltodict.parse(content)['root']['orders']['medical_order_item']['despensing_num'] == '1.0'
+        assert xmltodict.parse(content)['root']['orders']['medical_order_item']['despensing_num'] == despensing_num
+        if expected == '-1':
+            assert not xmltodict.parse(content)['root']['orders']['medical_order_item']['drug_return_flag']
+        else:
+            assert not xmltodict.parse(content)['root']['orders']['medical_order_item']['stop_flag']
+
+    @pytest.mark.parametrize("xmlname,expected", [('ipt_cancel', '2')])
+    def test_ipt_2(self, get_conn, send, xmlname, expected):
+        """药嘱删除"""
+        send.post_xml(url_cancel, xmlname)
+        time.sleep(1)
+        filename = send.change_data['{{ts}}']
+        stdout = get_conn.exec_command('cat /tmp/hisresult/2020-03-06/H0003/receive_path/{}*.txt'.format(filename))[1]
+        content = stdout.read()
+        print(content.decode('utf-8'))
+        assert xmltodict.parse(content)['root']['orders']['medical_order_item']['order_status'] == expected
+        assert xmltodict.parse(content)['root']['orders']['medical_order_item']['order_id'] == 'o1_' + filename
+        assert xmltodict.parse(content)['root']['orders']['medical_order_item']['order_id'] == filename
 
 
 class TestHerb:
-    @pytest.mark.parametrize("xmlname,expected", [('herb_new', '0'),('herb_stop','4')])
-    def test_herb_0(self, get_conn, send, xmlname, expected):
-        """草药新开和停止"""
+    @pytest.mark.parametrize("xmlname,expected,despensing_num",
+                             [('herb_return_drug', '-1', '-7.0'), ('herb_stop', '4', '7.0')])
+    def test_herb_0(self, get_conn, send, xmlname,expected,despensing_num):
+        """草药退药和停止"""
         send.post_xml(url_normal, xmlname)
         time.sleep(1)
         filename = send.change_data['{{ts}}']
@@ -34,7 +53,13 @@ class TestHerb:
         assert xmltodict.parse(content)['root']['orders']['herb_medical_order']['herb_medical_order_info'][
                    'order_status'] == expected
         assert xmltodict.parse(content)['root']['orders']['herb_medical_order']['herb_medical_order_item'][
-                   'despensing_num'] == '7.0'
+                   'despensing_num'] == despensing_num
+        if expected == '-1':
+            assert not xmltodict.parse(content)['root']['orders']['herb_medical_order']['herb_medical_order_info'][
+                       'drug_return_flag']
+        else:
+            assert not xmltodict.parse(content)['root']['orders']['herb_medical_order']['herb_medical_order_info'][
+                'stop_flag']
 
     @pytest.mark.parametrize("xmlname,expected", [('herb_cancel', '2')])
     def test_herb_1(self, get_conn, send, xmlname, expected):
@@ -48,14 +73,13 @@ class TestHerb:
         assert xmltodict.parse(content)['root']['orders']['herb_medical_order']['herb_medical_order_info'][
                    'order_status'] == expected
         assert xmltodict.parse(content)['root']['orders']['herb_medical_order']['herb_medical_order_info'][
-                   'order_id'] == 'co4_'+ filename
-
+                   'order_id'] == 'co4_' + filename
 
 
 class TestOpt:
     @pytest.mark.parametrize("xmlname,expected", [('opt_new', 0)])
     def test_opt_0(self, get_conn, send, xmlname, expected):
-        """新开0"""
+        """原始正常状态，改成新版新开处方状态"""
         send.post_xml(url_normal, xmlname)
         time.sleep(3)
         filename = send.change_data['{{ts}}']
@@ -65,9 +89,10 @@ class TestOpt:
         assert xmltodict.parse(content)['root']['opt_prescriptions']['opt_prescription']['opt_prescription_info'][
                    'recipe_status'] == expected
 
-    @pytest.mark.parametrize("xmlname,expected", [('opt_zuofei', '2'), ('opt_delete', '2')])
+    @pytest.mark.parametrize("xmlname,expected", [('opt_zuofei', '2'), ('opt_delete', '2'), ('opt_return_drug_1', '2')])
     def test_opt_1(self, get_conn, send, xmlname, expected):
-        """作废处方2，删除处方，注意一下是新版本入参，旧版本4.1的接口文档缺少recipe_doc_id、recipe_doc_name
+        """原作废处方、删除处方都按新版删除处方处理，注意以下是新版本入参，旧版本4.1的接口文档缺少recipe_doc_id、recipe_doc_name
+            原始处方退药状态,全退（无明细）
         <root>
           <base>
             <hospital_code><![CDATA[H0003]]></hospital_code>
@@ -106,7 +131,7 @@ class TestOpt:
 
     @pytest.mark.parametrize("xmlname,expected", [('opt_return_drug_1', '-1')])
     def test_opt_2(self, get_conn, send, xmlname, expected):
-        """全部退药,原recipe_status=1"""
+        """原全部退药状态，全退(有明细)，按新版退药处理"""
         send.post_xml(url_normal, xmlname)
         time.sleep(1)
         filename = send.change_data['{{ts}}']
@@ -118,7 +143,3 @@ class TestOpt:
                    'recipe_status'] == expected
         assert xmltodict.parse(content)['root']['opt_prescriptions']['opt_prescription']['opt_prescription_item'][
                    'despensing_num'] == '-3.0'
-
-    def test_opt_3(self):
-        """部分退药"""
-        pass
