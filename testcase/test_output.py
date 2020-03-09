@@ -15,7 +15,7 @@ class TestIpt:
         send.post_xml(url_normal, xmlname)
         time.sleep(1)
         filename = send.change_data['{{ts}}']
-        stdout = get_conn.exec_command('cat /tmp/hisresult/2020-03-06/H0003/receive_path/{}*.txt'.format(filename))[1]
+        stdout = get_conn.exec_command('cat /tmp/hisresult/2020-03-09/H0003/receive_path/{}*.txt'.format(filename))[1]
         content = stdout.read()
         print(content.decode('utf-8'))
         assert xmltodict.parse(content)['root']['orders']['medical_order_item']['order_status'] == expected
@@ -35,7 +35,7 @@ class TestIpt:
         send.post_xml(url_cancel, xmlname)
         time.sleep(1)
         filename = send.change_data['{{ts}}']
-        stdout = get_conn.exec_command('cat /tmp/hisresult/2020-03-06/H0003/receive_path/{}*.txt'.format(filename))[1]
+        stdout = get_conn.exec_command('cat /tmp/hisresult/2020-03-09/H0003/receive_path/{}*.txt'.format(filename))[1]
         content = stdout.read()
         print(content.decode('utf-8'))
         assert xmltodict.parse(content)['root']['orders']['medical_order_item']['order_status'] == expected
@@ -51,7 +51,7 @@ class TestHerb:
         send.post_xml(url_normal, xmlname)
         time.sleep(1)
         filename = send.change_data['{{ts}}']
-        stdout = get_conn.exec_command('cat /tmp/hisresult/2020-03-06/H0003/receive_path/{}*.txt'.format(filename))[1]
+        stdout = get_conn.exec_command('cat /tmp/hisresult/2020-03-09/H0003/receive_path/{}*.txt'.format(filename))[1]
         content = stdout.read()
         print(content.decode('utf-8'))
         assert xmltodict.parse(content)['root']['orders']['herb_medical_order']['herb_medical_order_info'][
@@ -78,7 +78,7 @@ class TestHerb:
         send.post_xml(url_cancel, xmlname)
         time.sleep(1)
         filename = send.change_data['{{ts}}']
-        stdout = get_conn.exec_command('cat /tmp/hisresult/2020-03-06/H0003/receive_path/{}*.txt'.format(filename))[1]
+        stdout = get_conn.exec_command('cat /tmp/hisresult/2020-03-09/H0003/receive_path/{}*.txt'.format(filename))[1]
         content = stdout.read()
         print(content.decode('utf-8'))
         assert xmltodict.parse(content)['root']['orders']['herb_medical_order']['herb_medical_order_info'][
@@ -94,7 +94,7 @@ class TestOpt:
         send.post_xml(url_normal, xmlname)
         time.sleep(3)
         filename = send.change_data['{{ts}}']
-        stdout = get_conn.exec_command('cat /tmp/hisresult/2020-03-06/H0003/receive_path/{}*.txt'.format(filename))[1]
+        stdout = get_conn.exec_command('cat /tmp/hisresult/2020-03-09/H0003/receive_path/{}*.txt'.format(filename))[1]
         content = stdout.read()
         print(content.decode('utf-8'))
         assert xmltodict.parse(content)['root']['opt_prescriptions']['opt_prescription']['opt_prescription_info'][
@@ -130,7 +130,7 @@ class TestOpt:
             send.post_xml(url_normal, xmlname)
         time.sleep(1)
         filename = send.change_data['{{ts}}']
-        stdout = get_conn.exec_command('cat /tmp/hisresult/2020-03-06/H0003/receive_path/{}*.txt'.format(filename))[1]
+        stdout = get_conn.exec_command('cat /tmp/hisresult/2020-03-09/H0003/receive_path/{}*.txt'.format(filename))[1]
         content = stdout.read()
         print(content.decode('utf-8'))
         assert xmltodict.parse(content)['root']['opt_prescriptions']['opt_prescription']['opt_prescription_info'][
@@ -146,7 +146,7 @@ class TestOpt:
         send.post_xml(url_normal, xmlname)
         time.sleep(1)
         filename = send.change_data['{{ts}}']
-        stdout = get_conn.exec_command('cat /tmp/hisresult/2020-03-06/H0003/receive_path/{}*.txt'.format(filename))[1]
+        stdout = get_conn.exec_command('cat /tmp/hisresult/2020-03-09/H0003/receive_path/{}*.txt'.format(filename))[1]
         content = stdout.read()
         print(content)
         print(content.decode('utf-8'))
