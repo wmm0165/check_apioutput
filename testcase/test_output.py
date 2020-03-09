@@ -5,17 +5,21 @@ import pytest
 import xmltodict
 import time
 from config.cfg import url_normal, url_cancel
+import datetime
+
+curdate = ((datetime.datetime.now())).strftime("%Y-%m-%d")  # 获取当天日期
+print(curdate)
 
 
 class TestIpt:
     @pytest.mark.parametrize("xmlname,expected,despensing_num",
-                             [('ipt_return_drug', '-1', '-1.0'), ('ipt_stop', '4', '1.0'),('ipt_new', '0', '1.0')])
+                             [('ipt_return_drug', '-1', '-1.0'), ('ipt_stop', '4', '1.0'), ('ipt_new', '0', '1.0')])
     def test_ipt_0(self, get_conn, send, xmlname, expected, despensing_num):
         """药嘱新开、退药和停止"""
         send.post_xml(url_normal, xmlname)
         time.sleep(1)
         filename = send.change_data['{{ts}}']
-        stdout = get_conn.exec_command('cat /tmp/hisresult/2020-03-09/H0003/receive_path/{}*.txt'.format(filename))[1]
+        stdout = get_conn.exec_command('cat /tmp/hisresult/{}/H0003/receive_path/{}*.txt'.format(curdate, filename))[1]
         content = stdout.read()
         print(content.decode('utf-8'))
         assert xmltodict.parse(content)['root']['orders']['medical_order_item']['order_status'] == expected
@@ -28,14 +32,13 @@ class TestIpt:
             assert not xmltodict.parse(content)['root']['orders']['medical_order_item']['drug_return_flag']
             assert not xmltodict.parse(content)['root']['orders']['medical_order_item']['stop_flag']
 
-
     @pytest.mark.parametrize("xmlname,expected", [('ipt_cancel', '2')])
     def test_ipt_2(self, get_conn, send, xmlname, expected):
         """药嘱删除"""
         send.post_xml(url_cancel, xmlname)
         time.sleep(1)
         filename = send.change_data['{{ts}}']
-        stdout = get_conn.exec_command('cat /tmp/hisresult/2020-03-09/H0003/receive_path/{}*.txt'.format(filename))[1]
+        stdout = get_conn.exec_command('cat /tmp/hisresult/{}/H0003/receive_path/{}*.txt'.format(curdate,filename))[1]
         content = stdout.read()
         print(content.decode('utf-8'))
         assert xmltodict.parse(content)['root']['orders']['medical_order_item']['order_status'] == expected
@@ -45,13 +48,13 @@ class TestIpt:
 
 class TestHerb:
     @pytest.mark.parametrize("xmlname,expected,despensing_num",
-                             [('herb_return_drug', '-1', '-7.0'), ('herb_stop', '4', '7.0'),('herb_new', '0', '7.0')])
-    def test_herb_0(self, get_conn, send, xmlname,expected,despensing_num):
+                             [('herb_return_drug', '-1', '-7.0'), ('herb_stop', '4', '7.0'), ('herb_new', '0', '7.0')])
+    def test_herb_0(self, get_conn, send, xmlname, expected, despensing_num):
         """草药新开、退药和停止"""
         send.post_xml(url_normal, xmlname)
         time.sleep(1)
         filename = send.change_data['{{ts}}']
-        stdout = get_conn.exec_command('cat /tmp/hisresult/2020-03-09/H0003/receive_path/{}*.txt'.format(filename))[1]
+        stdout = get_conn.exec_command('cat /tmp/hisresult/{}/H0003/receive_path/{}*.txt'.format(curdate,filename))[1]
         content = stdout.read()
         print(content.decode('utf-8'))
         assert xmltodict.parse(content)['root']['orders']['herb_medical_order']['herb_medical_order_info'][
@@ -60,7 +63,7 @@ class TestHerb:
                    'despensing_num'] == despensing_num
         if expected == '-1':
             assert not xmltodict.parse(content)['root']['orders']['herb_medical_order']['herb_medical_order_info'][
-                       'drug_return_flag']
+                'drug_return_flag']
         elif expected == '4':
             assert not xmltodict.parse(content)['root']['orders']['herb_medical_order']['herb_medical_order_info'][
                 'stop_flag']
@@ -70,15 +73,13 @@ class TestHerb:
             assert not xmltodict.parse(content)['root']['orders']['herb_medical_order']['herb_medical_order_info'][
                 'stop_flag']
 
-
-
     @pytest.mark.parametrize("xmlname,expected", [('herb_cancel', '2')])
     def test_herb_1(self, get_conn, send, xmlname, expected):
         """草药撤销"""
         send.post_xml(url_cancel, xmlname)
         time.sleep(1)
         filename = send.change_data['{{ts}}']
-        stdout = get_conn.exec_command('cat /tmp/hisresult/2020-03-09/H0003/receive_path/{}*.txt'.format(filename))[1]
+        stdout = get_conn.exec_command('cat /tmp/hisresult/{}/H0003/receive_path/{}*.txt'.format(curdate,filename))[1]
         content = stdout.read()
         print(content.decode('utf-8'))
         assert xmltodict.parse(content)['root']['orders']['herb_medical_order']['herb_medical_order_info'][
@@ -94,7 +95,7 @@ class TestOpt:
         send.post_xml(url_normal, xmlname)
         time.sleep(3)
         filename = send.change_data['{{ts}}']
-        stdout = get_conn.exec_command('cat /tmp/hisresult/2020-03-09/H0003/receive_path/{}*.txt'.format(filename))[1]
+        stdout = get_conn.exec_command('cat /tmp/hisresult/{}/H0003/receive_path/{}*.txt'.format(curdate,filename))[1]
         content = stdout.read()
         print(content.decode('utf-8'))
         assert xmltodict.parse(content)['root']['opt_prescriptions']['opt_prescription']['opt_prescription_info'][
@@ -130,7 +131,7 @@ class TestOpt:
             send.post_xml(url_normal, xmlname)
         time.sleep(1)
         filename = send.change_data['{{ts}}']
-        stdout = get_conn.exec_command('cat /tmp/hisresult/2020-03-09/H0003/receive_path/{}*.txt'.format(filename))[1]
+        stdout = get_conn.exec_command('cat /tmp/hisresult/{}/H0003/receive_path/{}*.txt'.format(curdate,filename))[1]
         content = stdout.read()
         print(content.decode('utf-8'))
         assert xmltodict.parse(content)['root']['opt_prescriptions']['opt_prescription']['opt_prescription_info'][
@@ -146,7 +147,7 @@ class TestOpt:
         send.post_xml(url_normal, xmlname)
         time.sleep(1)
         filename = send.change_data['{{ts}}']
-        stdout = get_conn.exec_command('cat /tmp/hisresult/2020-03-09/H0003/receive_path/{}*.txt'.format(filename))[1]
+        stdout = get_conn.exec_command('cat /tmp/hisresult/{}/H0003/receive_path/{}*.txt'.format(curdate,filename))[1]
         content = stdout.read()
         print(content)
         print(content.decode('utf-8'))
