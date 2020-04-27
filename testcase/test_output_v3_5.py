@@ -141,7 +141,7 @@ class TestOpt:
         assert xmltodict.parse(content)['root']['opt_prescriptions']['opt_prescription']['opt_prescription_info'][
                    'recipe_status'] == expected
 
-    @pytest.mark.parametrize("xmlname,expected", [('opt_return_drug_2', '-1')])
+    @pytest.mark.parametrize("xmlname,expected", [('opt_return_drug_2', '1')])
     def test_opt_2(self, get_conn, send, xmlname, expected):
         """原全部退药状态，全退(有明细)，按新版退药处理"""
         send.post_xml(url_normal, xmlname)
@@ -155,3 +155,7 @@ class TestOpt:
                    'recipe_status'] == expected
         assert xmltodict.parse(content)['root']['opt_prescriptions']['opt_prescription']['opt_prescription_item'][
                    'despensing_num'] == '-3.0'
+
+
+if __name__ == '__main__':
+    pytest.main()
