@@ -48,7 +48,7 @@ class TestIpt:
 
 class TestHerb:
     @pytest.mark.parametrize("xmlname,expected,despensing_num",
-                             [('herb_return_drug', '-1', '-7.0'), ('herb_stop', '4', '7.0'), ('herb_new', '0', '7.0')])
+                             [('herb_return_drug', '-1', '-7.0'), ('herb_stop', '0', '7.0'), ('herb_new', '0', '7.0')])
     def test_herb_0(self, get_conn, send, xmlname, expected, despensing_num):
         """草药新开、退药和停止"""
         send.post_xml(url_normal, xmlname)
