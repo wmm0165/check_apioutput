@@ -13,7 +13,7 @@ print(curdate)
 
 class TestIpt:
     @pytest.mark.parametrize("xmlname,expected,despensing_num",
-                             [('ipt_return_drug', '-1', '-1.0'), ('ipt_stop', '4', '1.0'), ('ipt_new', '0', '1.0')])
+                             [('ipt_return_drug', '-1', '-1.0'), ('ipt_stop', '0', '1.0'), ('ipt_new', '0', '1.0')])
     def test_ipt_0(self, get_conn, send, xmlname, expected, despensing_num):
         """药嘱新开、退药和停止"""
         send.post_xml(url_normal, xmlname)
